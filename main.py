@@ -3,12 +3,26 @@ from flask import Flask, Response
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 
 app = Flask(__name__)
 
 def get_actualites():
     url = "https://web.construction.gouv.ci/index.php/actualites"
 
+    # Configurer Selenium pour utiliser le navigateur Chrome
+    options = webdriver.ChromeOptions()
+    options.add_argument('--headless')  # Exécuter en mode sans tête
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+
+    driver.get(url)
+    driver.implicitly_wait(10)  # Attendre 10 secondes pour que la page se charge
+
+    soup = BeautifulSoup(driver.page_source, "html.parser")
+    driver.quit()
+    
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
     }
