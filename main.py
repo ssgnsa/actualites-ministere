@@ -9,11 +9,20 @@ app = Flask(__name__)
 def get_actualites():
     url = "https://web.construction.gouv.ci/index.php/actualites"
 
-  headers = {
-      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
-  }
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+    }
     response = requests.get(url, headers=headers)
+
+    if response.status_code != 200:
+        print(f"Erreur lors du chargement des actualités: {response.status_code}")
+        return []
+
+    # Analyser le contenu de la page
     soup = BeautifulSoup(response.content, "html.parser")
+
+    # Vérification du contenu de la page
+    print(f"Contenu de la page récupéré: {soup.prettify()[:500]}...")  # Afficher les 500 premiers caractères
 
     articles = []
     for item in soup.select(".item"):
