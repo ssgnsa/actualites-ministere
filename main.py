@@ -8,7 +8,11 @@ app = Flask(__name__)
 
 def get_actualites():
     url = "https://web.construction.gouv.ci/index.php/actualites"
-    response = requests.get(url)
+
+  headers = {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+  }
+    response = requests.get(url, headers=headers)
     soup = BeautifulSoup(response.content, "html.parser")
 
     articles = []
